@@ -77,6 +77,20 @@ void Texture2D::SetTexture(Image* image, bool isfree)
 	if (!image->IsActive())
 		return;
 
+	int format = GL_RGB;
+	switch (image->NrChannels())
+	{
+	case 1:
+		format = GL_RED;
+		break;
+	case 3:
+		format = GL_RGB;
+		break;
+	case 4:
+		format = GL_RGBA;
+		break;
+	}
+
 	DeleteTexture();
 
 	glGenTextures(1, &id_);
@@ -87,7 +101,7 @@ void Texture2D::SetTexture(Image* image, bool isfree)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->Width(), image->Height(), 0, GL_RGB, GL_UNSIGNED_BYTE, image->Data());
+	glTexImage2D(GL_TEXTURE_2D, 0, format, image->Width(), image->Height(), 0, format, GL_UNSIGNED_BYTE, image->Data());
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -107,18 +121,18 @@ void Texture2D::DeleteTexture()
 }
 
 
-void Texture2D::SetData(Image* image)
-{
-	if (!id_)
-		return;
-
-	if (!image->IsActive())
-		return;
-
-	glBindTexture(GL_TEXTURE_2D, id_);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->Width(), image->Height(), 0, GL_RGB, GL_UNSIGNED_BYTE, image->Data());
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
+//void Texture2D::SetData(Image* image)
+//{
+//	if (!id_)
+//		return;
+//
+//	if (!image->IsActive())
+//		return;
+//
+//	glBindTexture(GL_TEXTURE_2D, id_);
+//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->Width(), image->Height(), 0, GL_RGB, GL_UNSIGNED_BYTE, image->Data());
+//	glBindTexture(GL_TEXTURE_2D, 0);
+//}
 
 
 void Texture2D::Use()

@@ -1,6 +1,7 @@
 #pragma once
 
 
+
 class Image
 {
 public:
@@ -15,22 +16,22 @@ public:
 	void DeletePicture();
 
 	//是否可用
-	bool IsActive() { return data_ ? true : false; }
+	bool IsActive()const { return data_ ? true : false; }
 
 	//图片数据
-	unsigned char* Data() { return data_; }
+	unsigned char* Data()const { return data_; }
 
 	//图片路径
-	const char* Path() { return path_; }
+	const char* Path()const { return path_; }
 
 	//宽
-	int Width() { return width_; }
+	int Width()const { return width_; }
 
 	//高
-	int Height() { return height_; }
+	int Height()const { return height_; }
 
 	//颜色通道个数
-	int NrChannels() { return nr_channels_; }
+	int NrChannels()const { return nr_channels_; }
 
 private:
 	unsigned char* data_;
@@ -55,7 +56,7 @@ public:
 	void DeleteTexture();
 
 	//更新数据
-	void SetData(Image* image);
+	//void SetData(Image* image);
 
 	//是否可用
 	bool IsActive() { return id_ != 0; }

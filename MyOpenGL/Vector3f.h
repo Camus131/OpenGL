@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GLMath.h"
+#include "Math.h"
 
 
 class Vector3f
@@ -30,6 +30,9 @@ public:
 		return *this;
 	}
 
+	//获得地址
+	float* GetPtr()const { return (float*)v_; }
+
 	//取值
 	float& x() { return v_[0]; }
 	float& y() { return v_[1]; }
@@ -55,9 +58,9 @@ public:
 
 	//叉乘
 	static Vector3f CrossProduct(const Vector3f& v1, const Vector3f& v2) { return Vector3f(v1.y() * v2.z() - v1.z() * v2.y(), v1.z() * v2.x() - v1.x() * v2.z(), v1.x() * v2.y() - v1.y() * v2.x()); }
-	
+
 	//距离
-	static float Distance(const Vector3f& v1, const Vector3f& v2) 
+	static float Distance(const Vector3f& v1, const Vector3f& v2)
 	{
 		float dx = v1.x() - v2.x();
 		float dy = v1.y() - v2.y();

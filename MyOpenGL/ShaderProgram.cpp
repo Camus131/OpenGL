@@ -89,9 +89,27 @@ void ShaderProgram::SetUniformFloat(const char* name, float value)
 }
 
 
-void ShaderProgram::SetUniformMat4x4(const char* name, const float* value)
+void ShaderProgram::SetUniformInt(const char* name, int value)
 {
-	glUniformMatrix4fv(glGetUniformLocation(id_, name), 1, GL_FALSE, value);
+	glUniform1i(glGetUniformLocation(id_, name), value);
+}
+
+
+void ShaderProgram::SetUniformMat4x4(const char* name, const Matrix4x4f& value)
+{
+	glUniformMatrix4fv(glGetUniformLocation(id_, name), 1, GL_FALSE, value.GetPtr());
+}
+
+
+void ShaderProgram::SetUniformVec3(const char* name, const Vector3f& value)
+{
+	glUniform3fv(glGetUniformLocation(id_, name), 1, value.GetPtr());
+}
+
+
+void ShaderProgram::SetUniformVec2(const char* name, const Vector2f& value)
+{
+	glUniform2fv(glGetUniformLocation(id_, name), 1, value.GetPtr());
 }
 
 
@@ -139,3 +157,101 @@ void ShaderProgram::CheckError(unsigned int shader, int type)
 	}break;
 	}
 }
+
+const char* ShaderProgram::DefaultVertexShader =
+"#version 330 core\n"
+
+"uniform mat4 model;\n"
+"uniform mat4 view;\n"
+"uniform mat4 projection;\n"
+
+"layout(location = 0) in vec3 position;\n"
+"layout(location = 1) in vec3 normal;\n"
+"layout(location = 2) in vec3 texCoord;\n"
+
+"out vec3 FragPos;\n"
+"out vec3 Normal;\n"
+"out vec2 TexCoord;\n"
+
+"void main()\n"
+"{\n"
+"	FragPos = vec3(model * vec4(position, 1.0f));\n"
+"	Normal = mat3(transpose(inverse(model))) * normal;\n"
+"	TexCoord = vec2(texCoord.x, texCoord.y);\n"
+"	gl_Position = projection * view * model * vec4(position, 1.0f);\n"
+"}\0";
+
+const char* ShaderProgram::InstancedVertexShader =
+"#version 330 core\n"
+
+"uniform mat4 model;\n"
+"uniform mat4 view;\n"
+"uniform mat4 projection;\n"
+
+"layout(location = 0) in vec3 position;\n"
+"layout(location = 1) in vec3 normal;\n"
+"layout(location = 2) in vec3 texCoord;\n"
+"layout(location = 3) in vec3 instanceInfo;\n"
+
+"out vec3 FragPos;\n"
+"out vec3 Normal;\n"
+"out vec2 TexCoord;\n"
+
+"void main()\n"
+"{\n"
+"   vec3 positionNew = instanceInfo + position;\n"
+"	FragPos = vec3(model * vec4(positionNew, 1.0f));\n"
+"	Normal = mat3(transpose(inverse(model))) * normal;\n"
+"	TexCoord = vec2(texCoord.x, texCoord.y);\n"
+"	gl_Position = projection * view * model * vec4(positionNew, 1.0f);\n"
+"}\0";
+
+const char* ShaderProgram::DefaultFragmentShader =
+"#version 330 core\n"
+
+"struct Material\n"
+"{\n"
+"	sampler2D diffuse;\n"
+"	sampler2D specular;\n"
+"	float shininess;\n"
+"};\n"
+
+"struct Light\n"
+"{\n"
+"	vec3 position;\n"
+"	vec3 ambient;\n"
+"	vec3 diffuse;\n"
+"	vec3 specular;\n"
+"};\n"
+
+"uniform vec3 viewPos;\n"
+"uniform Material material;\n"
+"uniform Light light;\n"
+
+"in vec3 FragPos;\n"
+"in vec3 Normal;\n"
+"in vec2 TexCoord;\n"
+
+"out vec4 FragColor;\n"
+
+"void main()\n"
+"{\n"
+"	vec3 normal = normalize(Normal);\n"
+
+//环境光分量
+"	vec3 ambient = light.ambient * texture(material.diffuse, TexCoord).rgb;\n"
+
+//漫反射光分量
+"	vec3 lightDir = normalize(light.position - FragPos);\n"
+"	float diff = max(dot(normal, lightDir), 0.0f);\n"
+"	vec3 diffuse = light.diffuse * diff * texture(material.diffuse, TexCoord).rgb;\n"
+
+//镜面光分量
+"	vec3 viewDir = normalize(viewPos - FragPos);\n"
+"	vec3 reflectDir = reflect(-lightDir, normal);\n"
+"	float spec = pow(max(dot(viewDir, reflectDir), 0.0f), material.shininess);\n"
+"	vec3 specular = light.specular * spec * texture(material.specular, TexCoord).rgb;\n"
+
+"	vec3 result = ambient + diffuse + specular;\n"
+"	FragColor = vec4(result, 1.0);\n"
+"}\0";

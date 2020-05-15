@@ -1,4 +1,4 @@
-#include "Window.h"
+#include "GLWindow.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -6,8 +6,11 @@
 #include <iostream>
 
 
-Window::Window(int width, int height)
+
+GLWindow::GLWindow(int width, int height)
 {
+    width_ = 0;
+    height_ = 0;
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -22,20 +25,23 @@ Window::Window(int width, int height)
     {
         std::cout << "创建glfw窗口失败！" << std::endl;
         glfwTerminate();
+        return;
     }
     glfwMakeContextCurrent(window_);
-    glfwSetFramebufferSizeCallback(window_, FramebufferSize_callback);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "初始化glad失败！" << std::endl;
         glfwTerminate();
         window_ = nullptr;
+        return;
     }
+    width_ = width;
+    height_ = height;
 }
 
 
-Window::~Window()
+GLWindow::~GLWindow()
 {
     if (window_)
     {
@@ -44,27 +50,14 @@ Window::~Window()
     }
 }
 
-int Window::IsShouldClose()
+int GLWindow::IsShouldClose()
 {
     return glfwWindowShouldClose(window_);
 }
 
 
-void Window::ProcessInput()
-{
-    if (glfwGetKey(window_, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window_, true);
-}
-
-
-void Window::SwapBuffer()
+void GLWindow::SwapBuffer()
 {
     glfwSwapBuffers(window_);
     glfwPollEvents();
-}
-
-
-void Window::FramebufferSize_callback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
 }

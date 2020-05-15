@@ -160,22 +160,23 @@
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="Viewer.cpp" />
-    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="GLWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="GLMath.h" />
+    <ClInclude Include="Math.h" />
     <ClInclude Include="Matrix4x4f.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="RenderState.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="Vector2f.h" />
     <ClInclude Include="Vector3f.h" />
     <ClInclude Include="Viewer.h" />
-    <ClInclude Include="Window.h" />
+    <ClInclude Include="GLWindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

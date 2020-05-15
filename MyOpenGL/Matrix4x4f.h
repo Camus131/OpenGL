@@ -3,6 +3,7 @@
 #include "Vector3f.h"
 
 
+
 class Matrix4x4f
 {
 public:
@@ -36,6 +37,9 @@ public:
 		m_[0][3] = 0.0f; m_[1][3] = 0.0f; m_[2][3] = 0.0f; m_[3][3] = 1.0f;
 		return *this;
 	}
+
+	//获得地址
+	float* GetPtr()const { return (float*)m_; }
 
 	//重载操作符
 	float& operator()(int row, int col) { return m_[col][row]; }
@@ -142,8 +146,8 @@ public:
 		float x = a.x();
 		float y = a.y();
 		float z = a.z();
-		float c = GLMath::Cos(angle);
-		float s = GLMath::Sin(angle);
+		float c = Cos(angle);
+		float s = Sin(angle);
 		return Matrix4x4f(
 			x * x * (1.0f - c) + c, x * y * (1.0f - c) - z * s, x * z * (1.0f - c) + y * s, 0.0f,
 			x * y * (1.0f - c) + z * s, y * y * (1.0f - c) + c, y * z * (1.0f - c) - x * s, 0.0f,
@@ -204,7 +208,7 @@ public:
 	//透视投影矩阵(fov)
 	static Matrix4x4f PerspectiveFov(float fovy, float aspect, float near, float far)
 	{
-		float cot = GLMath::Cot(fovy / 2);
+		float cot = Cot(fovy / 2);
 		return Matrix4x4f(
 			cot / aspect, 0.0f, 0.0f, 0.0f,
 			0.0f, cot, 0.0f, 0.0f,

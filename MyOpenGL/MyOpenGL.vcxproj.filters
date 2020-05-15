@@ -35,9 +35,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>GL</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>GL</Filter>
-    </ClCompile>
     <ClCompile Include="RenderState.cpp">
       <Filter>GL</Filter>
     </ClCompile>
@@ -48,6 +45,9 @@
       <Filter>第三方</Filter>
     </ClCompile>
     <ClCompile Include="Texture2D.cpp">
+      <Filter>GL</Filter>
+    </ClCompile>
+    <ClCompile Include="GLWindow.cpp">
       <Filter>GL</Filter>
     </ClCompile>
   </ItemGroup>
@@ -70,20 +70,23 @@
     <ClInclude Include="Camera.h">
       <Filter>GL</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>GL</Filter>
-    </ClInclude>
     <ClInclude Include="RenderState.h">
       <Filter>GL</Filter>
     </ClInclude>
     <ClInclude Include="Viewer.h">
       <Filter>GL</Filter>
     </ClInclude>
-    <ClInclude Include="GLMath.h">
-      <Filter>数学</Filter>
-    </ClInclude>
     <ClInclude Include="Texture2D.h">
       <Filter>GL</Filter>
+    </ClInclude>
+    <ClInclude Include="GLWindow.h">
+      <Filter>GL</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>数学</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2f.h">
+      <Filter>数学</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
